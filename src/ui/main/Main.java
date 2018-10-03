@@ -23,6 +23,12 @@ public class Main extends Application {
         //Leitura do FXML
         Parent root = FXMLLoader.load(getClass().getResource("Principal.fxml"));
         
+        //Titulo da Janela
+        stage.setTitle("Sistema Projeto Exemplo");
+        
+        //Icone da janela
+        stage.getIcons().add(new Image("/imagens/icone.png"));
+        
         //Criação da cena
         Scene scene = new Scene(root);
                 
