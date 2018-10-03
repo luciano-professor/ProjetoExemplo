@@ -29,6 +29,9 @@ public class Main extends Application {
         //Icone da janela
         stage.getIcons().add(new Image("/imagens/icone.png"));
         
+        //Maximizar a janela
+        stage.setMaximized(true);
+        
         //Criação da cena
         Scene scene = new Scene(root);
                 
