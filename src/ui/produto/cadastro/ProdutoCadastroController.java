@@ -9,6 +9,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -75,7 +76,12 @@ public class ProdutoCadastroController implements Initializable {
         );
         
         //Manda a classe de negocio salvar o produto
-        pBO.salvar(p);
+        try{
+            pBO.salvar(p);
+            
+        }catch(SQLException e){
+            //TODO colocar uma mensagem de erro
+        }
         
     }
     

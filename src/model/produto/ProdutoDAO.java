@@ -3,6 +3,7 @@ package model.produto;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import model.conexao.ConnectionFactory;
 import model.entidades.Produto;
 
@@ -42,13 +43,37 @@ public class ProdutoDAO {
                     resultado.getDouble("preco"),
                     resultado.getString("codigo"),
                     resultado.getDouble("quantidade"),
-                    resultado.getDate("validade")
+                    LocalDate.parse(resultado.getString("validade"))
             );
             
             return p;
         }
         
         return null;
+        
+    }
+    
+    public void salvar(Produto p) throws SQLException{
+        
+        String sql = "INSERT INTO produto (nome, preco, "
+                + "codigo, quantidade, validade) "
+                + "VALUES (?, ?, ?, ?, ?)";
+        
+        //Preparar o SQL
+        PreparedStatement ps = ConnectionFactory.prepararSQL(sql);
+        
+        //Substituir os valores
+        ps.setString(1, p.getNome());
+        ps.setDouble(2, p.getPreco());
+        ps.setString(3, p.getCodigo());
+        ps.setDouble(4, p.getQuantidade());
+        ps.setString(5, p.getValidade().toString());
+        
+        //Executar o comando no banco de dados
+        ps.executeUpdate();
+        
+        //fechar a conexao
+        ps.close();
         
     }
     

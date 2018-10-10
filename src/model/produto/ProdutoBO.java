@@ -25,11 +25,12 @@ public class ProdutoBO {
         
         //Verificar se existe um produto com o mesmo código
         if( dao.buscarPeloCodigo(p.getCodigo()) != null ){
+            //TODO lançar exceção
             //mensagem que já existe o produto com o codigo
         }else{
             //mandar salvar no banco de dados
+            dao.salvar(p);
         }
-        
         
     }
     
