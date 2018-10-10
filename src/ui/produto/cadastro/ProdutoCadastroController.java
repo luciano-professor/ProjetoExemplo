@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableView;
 import model.entidades.Produto;
+import model.produto.ProdutoBO;
 
 /**
  * FXML Controller class
@@ -42,12 +43,15 @@ public class ProdutoCadastroController implements Initializable {
     @FXML
     private TableView<Produto> tabela;
 
+    //A classe de negocio do produto
+    private ProdutoBO pBO;
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        pBO = new ProdutoBO();
     }    
 
     /**
@@ -69,6 +73,9 @@ public class ProdutoCadastroController implements Initializable {
                 qtdeDouble,
                 validade.getValue()
         );
+        
+        //Manda a classe de negocio salvar o produto
+        pBO.salvar(p);
         
     }
     
