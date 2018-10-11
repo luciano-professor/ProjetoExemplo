@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableView;
 import model.entidades.Produto;
 import model.produto.ProdutoBO;
@@ -75,14 +76,36 @@ public class ProdutoCadastroController implements Initializable {
                 validade.getValue()
         );
         
-        //Manda a classe de negocio salvar o produto
+        
         try{
+            //Mandando a classe de negocio salvar o produto
             pBO.salvar(p);
+            
+            //Limpando os campos apos salvar
+            limparCampos();
+            
+            Alert a = new Alert(Alert.AlertType.INFORMATION);
+            a.setTitle("Sucesso");
+            a.setHeaderText(null);
+            a.setContentText("Produto salvo com sucesso!");
+            a.showAndWait();
+            
             
         }catch(SQLException e){
             //TODO colocar uma mensagem de erro
         }
         
+    }
+    
+    /**
+     * 
+     */
+    private void limparCampos(){
+        nome.setText(null);
+        preco.setText(null);
+        codigo.setText(null);
+        quantidade.setText(null);
+        validade.setValue(null);
     }
     
 }
