@@ -8,6 +8,7 @@ package ui.produto.cadastro;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
+import excecoes.ProdutoExistenteException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -92,7 +93,23 @@ public class ProdutoCadastroController implements Initializable {
             
             
         }catch(SQLException e){
-            //TODO colocar uma mensagem de erro
+            
+            Alert a = new Alert(Alert.AlertType.ERROR);
+            a.setTitle("ERRO");
+            a.setHeaderText(null);
+            a.setContentText("Erro de comunicação com "
+                    + "o Banco de Dado procure o administrador "
+                    + "do sistema");
+            a.showAndWait();
+            
+        }catch(ProdutoExistenteException e){
+            
+            Alert a = new Alert(Alert.AlertType.ERROR);
+            a.setTitle("ERRO");
+            a.setHeaderText(null);
+            a.setContentText(e.getMessage());
+            a.showAndWait();
+            
         }
         
     }
