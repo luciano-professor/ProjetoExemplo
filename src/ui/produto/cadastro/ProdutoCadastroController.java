@@ -49,6 +49,8 @@ public class ProdutoCadastroController implements Initializable {
     //A classe de negocio do produto
     private ProdutoBO pBO;
     
+    
+    
     /**
      * Initializes the controller class.
      */

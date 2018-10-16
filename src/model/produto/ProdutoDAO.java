@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import model.conexao.ConnectionFactory;
 import model.entidades.Produto;
 
@@ -74,6 +75,46 @@ public class ProdutoDAO {
         
         //fechar a conexao
         ps.close();
+        
+    }
+    
+    /**
+     * Retorna todos os produtos do banco de dados
+     * @return 
+     */
+    public ArrayList<Produto> listar() throws SQLException{
+        
+        //Comando
+        String sql = "SELECT * FROM produto";
+        
+        //Preparar o SQL
+        PreparedStatement ps = ConnectionFactory.prepararSQL(sql);
+        
+        //Executa consulta no bd
+        ResultSet resultado = ps.executeQuery();
+        
+        //Criando a lista
+        ArrayList<Produto> lista = new ArrayList<Produto>();
+        
+        //Enquanto tiver resultado no BD
+        while(resultado.next()){
+            
+            //Cria o produto a partir do resultado do banco
+            Produto p = new Produto(
+                    resultado.getInt("id"),
+                    resultado.getString("nome"),
+                    resultado.getDouble("preco"),
+                    resultado.getString("codigo"),
+                    resultado.getDouble("quantidade"),
+                    LocalDate.parse(resultado.getDate("validade").toString())
+            );
+            
+            //adiciona o resultado na lista
+            lista.add(p);
+            
+        }
+        
+        return lista;
         
     }
     
