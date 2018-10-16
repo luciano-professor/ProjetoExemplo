@@ -1,10 +1,10 @@
 package ui.main;
 
-//https://stackoverflow.com/questions/36197764/javafx-stage-resizeable-false-and-maximized-true-hides-the-taskbar
+
 import java.io.IOException;
+import java.util.Locale;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -19,6 +19,9 @@ import javafx.stage.StageStyle;
 public class Main extends Application {
     
     public void start(Stage stage) throws IOException{
+        
+        //Configurando o local da aplicação
+        Locale.setDefault(new Locale("pt", "BR"));
         
         //Leitura do FXML
         Parent root = FXMLLoader.load(getClass().getResource("Principal.fxml"));
