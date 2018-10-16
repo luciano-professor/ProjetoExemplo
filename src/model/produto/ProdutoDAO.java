@@ -112,7 +112,7 @@ public class ProdutoDAO {
             //adiciona o resultado na lista
             lista.add(p);
             
-        }
+        }//while
         
         return lista;
         

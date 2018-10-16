@@ -12,11 +12,17 @@ import excecoes.ProdutoExistenteException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import model.entidades.Produto;
 import model.produto.ProdutoBO;
 
@@ -49,7 +55,9 @@ public class ProdutoCadastroController implements Initializable {
     //A classe de negocio do produto
     private ProdutoBO pBO;
     
-    
+    //Dados da Tabela
+    private ObservableList<Produto> dados;
+            
     
     /**
      * Initializes the controller class.
@@ -57,7 +65,57 @@ public class ProdutoCadastroController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         pBO = new ProdutoBO();
-    }    
+        
+        configurarTabela();
+        
+        carregarDados();
+        
+    } 
+    
+    /**
+     * Faz a configuração da tabela e das colunas
+     */
+    private void configurarTabela(){
+        
+        //Configurando as colunas da tabela
+        TableColumn<Produto, String> colNome = new TableColumn("Nome");
+        TableColumn<Produto, String> colCodigo = new TableColumn("Código");
+        TableColumn<Produto, Double> colPreco = new TableColumn("Preço");
+        TableColumn<Produto, Double> colQtde = new TableColumn("Quantidade");
+        TableColumn<Produto, String> colValidade = new TableColumn("Validade");
+
+        //Configurar como os valores serão lidos (nome dos atributos)
+        colNome.setCellValueFactory(new PropertyValueFactory<Produto, String>("nome"));
+        colCodigo.setCellValueFactory(new PropertyValueFactory<Produto, String>("codigo"));
+        colPreco.setCellValueFactory(new PropertyValueFactory<Produto, Double>("preco"));
+        colQtde.setCellValueFactory(new PropertyValueFactory<Produto, Double>("quantidade"));
+        colValidade.setCellValueFactory(new PropertyValueFactory<Produto, String>("validade"));
+        
+        //Adiciona as colunas na tabela na ordem que devem aparecer
+        tabela.getColumns().addAll(colCodigo, colNome, colPreco, 
+                colQtde, colValidade);
+        
+    }
+    
+    
+    /**
+     * Vai carregar os dados na tabela
+     */
+    private void carregarDados(){
+        
+        try {
+            //Cnvertendo o ArrayList no ObservableList com os dados do Banco
+            dados = FXCollections.observableArrayList(pBO.listar());
+            
+            //Joga os dados na tabela para exibir
+            tabela.setItems(dados);
+            
+        } catch (SQLException ex) {
+            //Mensagem de Erro
+            ex.printStackTrace();
+        }
+        
+    }
 
     /**
      * Salvar o produto no bd

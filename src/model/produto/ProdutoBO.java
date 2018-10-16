@@ -2,6 +2,7 @@ package model.produto;
 
 import excecoes.ProdutoExistenteException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import model.entidades.Produto;
 
 /**
@@ -39,6 +40,12 @@ public class ProdutoBO {
             //mandar salvar no banco de dados
             dao.salvar(p);
         }
+        
+    }
+    
+    public ArrayList<Produto> listar() throws SQLException{
+        
+        return dao.listar();
         
     }
     
