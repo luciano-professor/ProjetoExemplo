@@ -68,6 +68,8 @@ public class ProdutoCadastroController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         pBO = new ProdutoBO();
 
+        carregarComboBusca();
+        
         configurarTabela();
 
         carregarDados();
@@ -252,6 +254,19 @@ public class ProdutoCadastroController implements Initializable {
 
         }
 
+    }
+
+    private void carregarComboBusca() {
+        
+        //Criar uma lista
+        ObservableList<String> lista = 
+                FXCollections.observableArrayList(
+                    "Código", "Nome"
+                );
+        
+        //Jogar a lista no combo
+        comboBusca.getItems().addAll(lista);
+        
     }
 
 }
