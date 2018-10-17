@@ -80,16 +80,16 @@ public class ProdutoCadastroController implements Initializable {
         //Configurando as colunas da tabela
         TableColumn<Produto, String> colNome = new TableColumn("Nome");
         TableColumn<Produto, String> colCodigo = new TableColumn("Código");
-        TableColumn<Produto, Double> colPreco = new TableColumn("Preço");
+        TableColumn<Produto, Double> colPreco = new TableColumn("Preço R$");
         TableColumn<Produto, Double> colQtde = new TableColumn("Quantidade");
         TableColumn<Produto, String> colValidade = new TableColumn("Validade");
 
         //Configurar como os valores serão lidos (nome dos atributos)
         colNome.setCellValueFactory(new PropertyValueFactory<Produto, String>("nome"));
         colCodigo.setCellValueFactory(new PropertyValueFactory<Produto, String>("codigo"));
-        colPreco.setCellValueFactory(new PropertyValueFactory<Produto, Double>("preco"));
-        colQtde.setCellValueFactory(new PropertyValueFactory<Produto, Double>("quantidade"));
-        colValidade.setCellValueFactory(new PropertyValueFactory<Produto, String>("validade"));
+        colPreco.setCellValueFactory(new PropertyValueFactory<Produto, Double>("precoFormatado"));
+        colQtde.setCellValueFactory(new PropertyValueFactory<Produto, Double>("quantidadeFormatada"));
+        colValidade.setCellValueFactory(new PropertyValueFactory<Produto, String>("validadeFormatada"));
 
         //Adiciona as colunas na tabela na ordem que devem aparecer
         tabela.getColumns().addAll(colCodigo, colNome, colPreco,
