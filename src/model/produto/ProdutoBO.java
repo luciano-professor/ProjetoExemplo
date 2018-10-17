@@ -49,4 +49,10 @@ public class ProdutoBO {
         
     }
     
+    public void excluir(Produto p) throws SQLException{
+        
+        //Mandar o dao excluir
+        dao.excluir(p);
+    }
+    
 }

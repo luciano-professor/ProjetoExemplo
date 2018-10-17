@@ -118,4 +118,23 @@ public class ProdutoDAO {
         
     }
     
+    public void excluir(Produto p) throws SQLException{
+        
+        //Comando SQL
+        String sql = "DELETE FROM produto WHERE id=?";
+        
+        //Preparar o SQL
+        PreparedStatement ps = ConnectionFactory.prepararSQL(sql);
+        
+        //Substituir os valores
+        ps.setInt(1, p.getId());
+       
+        //Executar o comando no banco de dados
+        ps.executeUpdate();
+        
+        //fechar a conexao
+        ps.close();
+        
+    }
+    
 }

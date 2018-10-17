@@ -39,7 +39,7 @@
                <children>
                   <JFXButton onAction="#salvar" text="Salvar" />
                   <JFXButton text="Editar" />
-                  <JFXButton text="Excluir" />
+                  <JFXButton onAction="#excluir" text="Excluir" />
                </children>
             </HBox>
             <Separator prefWidth="200.0" />
