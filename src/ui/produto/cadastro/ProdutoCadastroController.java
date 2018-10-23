@@ -252,6 +252,14 @@ public class ProdutoCadastroController implements Initializable {
 
             }
 
+        }else{
+            
+            Alert a = new Alert(Alert.AlertType.ERROR);
+            a.setTitle("ERRO");
+            a.setHeaderText(null);
+            a.setContentText("Selecione um produto ");
+            a.showAndWait();
+            
         }
 
     }
@@ -266,6 +274,35 @@ public class ProdutoCadastroController implements Initializable {
         
         //Jogar a lista no combo
         comboBusca.getItems().addAll(lista);
+        
+    }
+
+    @FXML
+    private void editar(ActionEvent event) {
+        
+        //Pegar o produto selecionado (pode ser null)
+        Produto p = tabela.getSelectionModel().getSelectedItem();
+        
+        if(p != null){//tem produto selecionado
+            
+            //Jogar os dados do produto nos campos
+            id.setText(String.valueOf(p.getId()));
+            nome.setText(p.getNome());
+            codigo.setText(p.getCodigo());
+            preco.setText(p.getPrecoFormatado());
+            quantidade.setText(p.getQuantidadeFormatada());
+            validade.setValue(p.getValidade());
+            
+            
+            
+        }else{//Não tem produto selecionado
+            
+            Alert a = new Alert(Alert.AlertType.ERROR);
+            a.setTitle("ERRO");
+            a.setHeaderText(null);
+            a.setContentText("Selecione um produto ");
+            a.showAndWait();
+        }
         
     }
 

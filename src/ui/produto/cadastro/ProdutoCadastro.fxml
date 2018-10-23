@@ -38,7 +38,7 @@
             <HBox alignment="TOP_RIGHT" prefWidth="200.0">
                <children>
                   <JFXButton onAction="#salvar" text="Salvar" />
-                  <JFXButton text="Editar" />
+                  <JFXButton onAction="#editar" text="Editar" />
                   <JFXButton onAction="#excluir" text="Excluir" />
                </children>
             </HBox>
