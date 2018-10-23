@@ -135,6 +135,33 @@ public class ProdutoDAO {
         //fechar a conexao
         ps.close();
         
+    }//excluir
+    
+    public void editar(Produto p) throws SQLException{
+        
+        //Comando SQL
+        String sql = "UPDATE produto SET nome=?, "
+                + "codigo=?, preco=?, quantidade=?, validade=? "
+                + "WHERE id=?";
+        
+        //Preparar o SQL
+        PreparedStatement ps = ConnectionFactory.prepararSQL(sql);
+        
+        //Substituir os valores
+        ps.setString(1, p.getNome());
+        ps.setString(2, p.getCodigo());
+        ps.setDouble(3, p.getPreco());
+        ps.setDouble(4, p.getQuantidade());
+        ps.setString(5, p.getValidade().toString());
+        ps.setInt(6, p.getId());
+        
+        //Executar o comando no banco de dados
+        ps.executeUpdate();
+        
+        //fechar a conexao
+        ps.close();
+        
+        
     }
     
 }

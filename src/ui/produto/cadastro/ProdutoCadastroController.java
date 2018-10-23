@@ -69,7 +69,7 @@ public class ProdutoCadastroController implements Initializable {
         pBO = new ProdutoBO();
 
         carregarComboBusca();
-        
+
         configurarTabela();
 
         carregarDados();
@@ -130,32 +130,81 @@ public class ProdutoCadastroController implements Initializable {
 
         try {
 
-            //Pegando os dados da tela e criando um produto
-            Produto p = new Produto(
-                    0,
-                    nome.getText(),
-                    preco.getText(),
-                    codigo.getText(),
-                    quantidade.getText(),
-                    validade.getValue()
-            );
+            if (id.getText().isEmpty()) {//no caso de inserir
 
-            //Mandando a classe de negocio salvar o produto
-            pBO.salvar(p);
+                //Pegando os dados da tela e criando um produto
+                Produto p = new Produto(
+                        "0",
+                        nome.getText(),
+                        preco.getText(),
+                        codigo.getText(),
+                        quantidade.getText(),
+                        validade.getValue()
+                );
 
-            //Atualizando os dados da tabela
-            carregarDados();
-            //dados.add(p); (outra opção que adiciona no fim da tabela)
+                //Mandando a classe de negocio salvar o produto
+                pBO.salvar(p);
 
-            //Limpando os campos apos salvar
-            limparCampos();
+                //Atualizando os dados da tabela
+                carregarDados();
+                //dados.add(p); (outra opção que adiciona no fim da tabela)
 
-            //Mensagem de Sucesso
-            Alert a = new Alert(Alert.AlertType.INFORMATION);
-            a.setTitle("Sucesso");
-            a.setHeaderText(null);
-            a.setContentText("Produto salvo com sucesso!");
-            a.showAndWait();
+                //Limpando os campos apos salvar
+                limparCampos();
+
+                //Mensagem de Sucesso
+                Alert a = new Alert(Alert.AlertType.INFORMATION);
+                a.setTitle("Sucesso");
+                a.setHeaderText(null);
+                a.setContentText("Produto salvo com sucesso!");
+                a.showAndWait();
+
+            } else {//no caso de editar
+
+                //Configurando a caixa de confirmacao
+                Alert conf = new Alert(Alert.AlertType.CONFIRMATION);
+                conf.setTitle("Editar");
+                conf.setHeaderText("");
+                conf.setContentText("Deseja mesmo salvar as alterações?");
+
+                //Pegando o botao que foi pressionado
+                Optional<ButtonType> btn = conf.showAndWait();
+
+                if (btn.get() == ButtonType.OK) {//quer mesmo salvar
+                    //Pegando os dados da tela e criando um produto
+                    Produto p = new Produto(
+                            id.getText(),
+                            nome.getText(),
+                            preco.getText(),
+                            codigo.getText(),
+                            quantidade.getText(),
+                            validade.getValue()
+                    );
+
+                    pBO.editar(p);
+
+                    //Atualizando os dados da tabela
+                    carregarDados();
+                    //dados.add(p); (outra opção que adiciona no fim da tabela)
+
+                    //Limpando os campos apos salvar
+                    limparCampos();
+
+                    //Mensagem de Sucesso
+                    Alert a = new Alert(Alert.AlertType.INFORMATION);
+                    a.setTitle("Sucesso");
+                    a.setHeaderText(null);
+                    a.setContentText("Produto salvo com sucesso!");
+                    a.showAndWait();
+
+                } else {
+
+                    //Limpando os campos apos salvar
+                    limparCampos();
+
+                }
+
+            }
 
         } catch (SQLException e) {
 
@@ -225,66 +274,66 @@ public class ProdutoCadastroController implements Initializable {
             if (btn.get() == ButtonType.OK) { //vai excluir
 
                 try {
-                    
+
                     //Manda a classe de negocio excluir
                     pBO.excluir(p);
-                    
+
                     //Atualizar a tabela
                     carregarDados();
-                    
+
                     //Mensagem de excluído com sucesso
                     Alert m = new Alert(Alert.AlertType.INFORMATION);
                     m.setTitle("Sucesso");
                     m.setHeaderText(null);
                     m.setContentText("Produto excluído com sucesso");
                     m.showAndWait();
-                    
+
                 } catch (SQLException ex) {
                     //Mensagem de erro
                     Alert a = new Alert(Alert.AlertType.ERROR);
                     a.setTitle("ERRO");
                     a.setHeaderText(null);
                     a.setContentText("Erro de comunicação com "
-                    + "o Banco de Dado procure o administrador "
-                    + "do sistema");
+                            + "o Banco de Dado procure o administrador "
+                            + "do sistema");
                     a.showAndWait();
                 }
 
             }
 
-        }else{
-            
+        } else {
+
             Alert a = new Alert(Alert.AlertType.ERROR);
             a.setTitle("ERRO");
             a.setHeaderText(null);
             a.setContentText("Selecione um produto ");
             a.showAndWait();
-            
+
         }
 
     }
 
     private void carregarComboBusca() {
-        
+
         //Criar uma lista
-        ObservableList<String> lista = 
-                FXCollections.observableArrayList(
-                    "Código", "Nome"
+        ObservableList<String> lista
+                = FXCollections.observableArrayList(
+                        "Código", "Nome"
                 );
-        
+
         //Jogar a lista no combo
         comboBusca.getItems().addAll(lista);
-        
+
     }
 
     @FXML
     private void editar(ActionEvent event) {
-        
+
         //Pegar o produto selecionado (pode ser null)
         Produto p = tabela.getSelectionModel().getSelectedItem();
-        
-        if(p != null){//tem produto selecionado
-            
+
+        if (p != null) {//tem produto selecionado
+
             //Jogar os dados do produto nos campos
             id.setText(String.valueOf(p.getId()));
             nome.setText(p.getNome());
@@ -292,18 +341,16 @@ public class ProdutoCadastroController implements Initializable {
             preco.setText(p.getPrecoFormatado());
             quantidade.setText(p.getQuantidadeFormatada());
             validade.setValue(p.getValidade());
-            
-            
-            
-        }else{//Não tem produto selecionado
-            
+
+        } else {//Não tem produto selecionado
+
             Alert a = new Alert(Alert.AlertType.ERROR);
             a.setTitle("ERRO");
             a.setHeaderText(null);
             a.setContentText("Selecione um produto ");
             a.showAndWait();
         }
-        
+
     }
 
 }

@@ -28,7 +28,7 @@ public class Produto {
         setValidade(validade);
     }
     
-    public Produto(int id, String nome, String preco, String codigo, String quantidade, LocalDate validade) throws ParseException {
+    public Produto(String id, String nome, String preco, String codigo, String quantidade, LocalDate validade) throws ParseException {
         setId(id);
         setNome(nome);
         setPreco(preco);
@@ -45,6 +45,10 @@ public class Produto {
 
     public void setId(int id) {
         this.id = id;
+    }
+    
+    public void setId(String id){
+        this.id = Integer.parseInt(id);
     }
 
     public String getNome() {
