@@ -45,9 +45,9 @@
             <Separator prefWidth="200.0" />
             <HBox prefWidth="200.0" spacing="10.0">
                <children>
-                  <JFXComboBox fx:id="comboBusca" prefHeight="31.0" prefWidth="172.0" />
+                  <JFXComboBox fx:id="comboBusca" prefHeight="31.0" prefWidth="172.0" promptText="Selecione" />
                   <JFXTextField fx:id="txtPesquisar" prefHeight="31.0" prefWidth="259.0" promptText="Pesquisar" />
-                  <JFXButton text="FIltrar" />
+                  <JFXButton onAction="#filtrar" text="FIltrar" />
                </children>
             </HBox>
             <TableView fx:id="tabela" prefHeight="200.0" prefWidth="200.0" />

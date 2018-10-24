@@ -79,4 +79,18 @@ public class ProdutoBO {
         
     }
     
+    public ArrayList<Produto> filtrarPeloCodigo(String pesquisar) throws SQLException{
+        
+        //Buscar no banco de dados
+        return dao.filtrarPeloCodigo(pesquisar);
+        
+    }
+    
+    public ArrayList<Produto> filtrarPeloNome(String pesquisar) throws SQLException{
+        
+        //Buscar no banco de dados
+        return dao.filtrarPeloNome(pesquisar);
+        
+    }
+    
 }

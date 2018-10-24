@@ -107,7 +107,7 @@ public class ProdutoCadastroController implements Initializable {
     private void carregarDados() {
 
         try {
-            //Cnvertendo o ArrayList no ObservableList com os dados do Banco
+            //Convertendo o ArrayList no ObservableList com os dados do Banco
             dados = FXCollections.observableArrayList(pBO.listar());
 
             //Joga os dados na tabela para exibir
@@ -323,6 +323,9 @@ public class ProdutoCadastroController implements Initializable {
 
         //Jogar a lista no combo
         comboBusca.getItems().addAll(lista);
+        
+        //Marcando o primeiro ja como selecionado
+        comboBusca.getSelectionModel().selectFirst();
 
     }
 
@@ -349,6 +352,74 @@ public class ProdutoCadastroController implements Initializable {
             a.setHeaderText(null);
             a.setContentText("Selecione um produto ");
             a.showAndWait();
+        }
+
+    }
+
+    @FXML
+    private void filtrar(ActionEvent event) {
+
+        //Pegar o que esta selecionado no comboBox
+        String campo = comboBusca.getValue();
+
+        if (campo != null) {//a pessoa selecionou um campo
+
+            //pegar o que estiver escrito no campo de pesquisa
+            String pesquisar = txtPesquisar.getText();
+
+            if (campo.equals("Código")) {
+
+                try {
+                    
+                    //Convertendo o ArrayList no ObservableList com os dados do Banco
+                    dados = FXCollections.observableArrayList(pBO.filtrarPeloCodigo(pesquisar));
+                    //Joga os dados na tabela para exibir
+                    tabela.setItems(dados);
+                    
+                } catch (SQLException ex) {
+                    
+                    
+                    
+                    //Mensagem de erro
+                    Alert a = new Alert(Alert.AlertType.ERROR);
+                    a.setTitle("ERRO");
+                    a.setHeaderText(null);
+                    a.setContentText("Erro de comunicação com "
+                            + "o Banco de Dado procure o administrador "
+                            + "do sistema");
+                    a.showAndWait();
+                    
+                }
+
+                
+
+            } else {//No caso de ser nome
+
+                //Buscar pelo Nome
+                try {
+                    
+                    //Convertendo o ArrayList no ObservableList com os dados do Banco
+                    dados = FXCollections.observableArrayList(pBO.filtrarPeloNome(pesquisar));
+                    //Joga os dados na tabela para exibir
+                    tabela.setItems(dados);
+                    
+                } catch (SQLException ex) {
+                    
+                    
+                    //Mensagem de erro
+                    Alert a = new Alert(Alert.AlertType.ERROR);
+                    a.setTitle("ERRO");
+                    a.setHeaderText(null);
+                    a.setContentText("Erro de comunicação com "
+                            + "o Banco de Dado procure o administrador "
+                            + "do sistema");
+                    a.showAndWait();
+                    
+                }
+            }
+
+        } else {
+            //TODO mensagem de erro de campo
         }
 
     }

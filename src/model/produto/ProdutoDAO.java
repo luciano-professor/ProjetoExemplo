@@ -164,4 +164,75 @@ public class ProdutoDAO {
         
     }
     
+    /**
+     * Buscar um produto pelo código
+     * @param p Código
+     * @return 
+     * @throws SQLException 
+     */
+    public ArrayList<Produto> filtrarPeloCodigo(String pesquisar) throws SQLException{
+        
+        //Comando
+        String sql = "SELECT * FROM produto WHERE codigo LIKE ?";
+        
+        return filtrar(pesquisar, sql);
+        
+    }
+    
+    /**
+     * Buscar um produto pelo código
+     * @param p Código
+     * @return 
+     * @throws SQLException 
+     */
+    public ArrayList<Produto> filtrarPeloNome(String pesquisar) throws SQLException{
+        
+        //Comando
+        String sql = "SELECT * FROM produto WHERE nome LIKE ?";
+        
+        return filtrar(pesquisar, sql);
+        
+    }
+    
+    /**
+     * Buscar um produto pelo código
+     * @param p Código
+     * @return 
+     * @throws SQLException 
+     */
+    public ArrayList<Produto> filtrar(String pesquisar, String sql) throws SQLException {
+    
+        //Preparar o SQL
+        PreparedStatement ps = ConnectionFactory.prepararSQL(sql);
+        
+        //Substituir os parametros
+        ps.setString(1, "%" + pesquisar + "%");
+        
+        //Executa consulta no bd
+        ResultSet resultado = ps.executeQuery();
+        
+        //Criar a lista
+        ArrayList<Produto> lista = new ArrayList<Produto>();
+        
+        //Verificar se tem algum resultado
+        while(resultado.next()){
+            //Cria o objeto com o resultado do BD
+            
+            Produto p = new Produto(
+                    resultado.getInt("id"),
+                    resultado.getString("nome"),
+                    resultado.getDouble("preco"),
+                    resultado.getString("codigo"),
+                    resultado.getDouble("quantidade"),
+                    LocalDate.parse(resultado.getDate("validade").toString())
+            );
+            
+            //Adiciono o produto na lista
+            lista.add(p);
+            
+        }
+        
+        return lista;
+        
+    }
 }
