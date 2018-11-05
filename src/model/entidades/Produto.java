@@ -1,5 +1,6 @@
 package model.entidades;
 
+import excecoes.ValorInvalidoException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -19,7 +20,7 @@ public class Produto {
     private double quantidade;
     private LocalDate validade; 
 
-    public Produto(int id, String nome, double preco, String codigo, double quantidade, LocalDate validade) {
+    public Produto(int id, String nome, double preco, String codigo, double quantidade, LocalDate validade) throws ValorInvalidoException {
         setId(id);
         setNome(nome);
         setPreco(preco);
@@ -28,7 +29,7 @@ public class Produto {
         setValidade(validade);
     }
     
-    public Produto(String id, String nome, String preco, String codigo, String quantidade, LocalDate validade) throws ParseException {
+    public Produto(String id, String nome, String preco, String codigo, String quantidade, LocalDate validade) throws ParseException, ValorInvalidoException {
         setId(id);
         setNome(nome);
         setPreco(preco);
@@ -55,8 +56,14 @@ public class Produto {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void setNome(String nome) throws ValorInvalidoException {
+        
+        if(!nome.matches("^[\\wÀ-ú][\\wÀ-ú\\s]*")){
+           throw new ValorInvalidoException("O campo nome é obrigatório e só aceita caracteres alfanuméricos e espaços.");
+        }
+        
         this.nome = nome;
+        
     }
 
     public double getPreco() {
@@ -67,12 +74,22 @@ public class Produto {
         this.preco = preco;
     }
     
-    public void setPreco(String preco) throws ParseException{
+    public void setPreco(String preco) throws ParseException, ValorInvalidoException{
+        
+        if(!preco.matches("^[0-9]+([,][0-9]+)?$")){
+           throw new ValorInvalidoException("O campo preço é obrigatório só pode conter dígitos e separador de decimal (,).");
+        }
+        
         NumberFormat nf = NumberFormat.getInstance();
         this.preco = nf.parse(preco).doubleValue();
     }
     
-    public void setQuantidade(String quantidade) throws ParseException{
+    public void setQuantidade(String quantidade) throws ParseException, ValorInvalidoException{
+        
+        if(!quantidade.matches("\\d+")){
+           throw new ValorInvalidoException("O campo quantidade  é obrigatório só pode conter dígitos.");
+        }
+        
         NumberFormat nf = NumberFormat.getInstance();
         this.quantidade = nf.parse(quantidade).doubleValue();
     }
@@ -81,8 +98,14 @@ public class Produto {
         return codigo;
     }
 
-    public void setCodigo(String codigo) {
+    public void setCodigo(String codigo) throws ValorInvalidoException {
+        
+        if(!codigo.matches("^[\\wÀ-ú]+")){
+           throw new ValorInvalidoException("O campo código  é obrigatório e só aceita caracteres alfanuméricos sem espaços.");
+        }
+        
         this.codigo = codigo;
+        
     }
 
     public double getQuantidade() {
@@ -126,7 +149,12 @@ public class Produto {
         return formatador.format(quantidade);
     }
 
-    public void setValidade(LocalDate validade) {
+    public void setValidade(LocalDate validade) throws ValorInvalidoException {
+        
+        if(validade == null){
+           throw new ValorInvalidoException("O campo validade  é obrigatório.");
+        }
+        
         this.validade = validade;
     }
     

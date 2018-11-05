@@ -1,6 +1,7 @@
 package model.produto;
 
 import excecoes.ProdutoExistenteException;
+import excecoes.ValorInvalidoException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import model.entidades.Produto;
@@ -25,7 +26,8 @@ public class ProdutoBO {
      */
     public void salvar(Produto p) 
             throws SQLException,
-            ProdutoExistenteException
+            ProdutoExistenteException,
+            ValorInvalidoException
     {
         
         //Verificar se existe um produto com o mesmo código
@@ -43,7 +45,7 @@ public class ProdutoBO {
         
     }
     
-    public ArrayList<Produto> listar() throws SQLException{
+    public ArrayList<Produto> listar() throws SQLException, ValorInvalidoException{
         
         return dao.listar();
         
@@ -55,7 +57,7 @@ public class ProdutoBO {
         dao.excluir(p);
     }
     
-    public void editar(Produto p) throws SQLException, ProdutoExistenteException{
+    public void editar(Produto p) throws SQLException, ProdutoExistenteException, ValorInvalidoException{
         
         //Verificar se existe o codigo do produto e
         //se o codigo é diferente desse mesmo produto
@@ -79,14 +81,14 @@ public class ProdutoBO {
         
     }
     
-    public ArrayList<Produto> filtrarPeloCodigo(String pesquisar) throws SQLException{
+    public ArrayList<Produto> filtrarPeloCodigo(String pesquisar) throws SQLException, ValorInvalidoException{
         
         //Buscar no banco de dados
         return dao.filtrarPeloCodigo(pesquisar);
         
     }
     
-    public ArrayList<Produto> filtrarPeloNome(String pesquisar) throws SQLException{
+    public ArrayList<Produto> filtrarPeloNome(String pesquisar) throws SQLException, ValorInvalidoException{
         
         //Buscar no banco de dados
         return dao.filtrarPeloNome(pesquisar);

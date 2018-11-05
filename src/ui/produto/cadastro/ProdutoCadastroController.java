@@ -9,13 +9,12 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import excecoes.ProdutoExistenteException;
+import excecoes.ValorInvalidoException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -95,6 +94,14 @@ public class ProdutoCadastroController implements Initializable {
         colQtde.setCellValueFactory(new PropertyValueFactory<Produto, Double>("quantidadeFormatada"));
         colValidade.setCellValueFactory(new PropertyValueFactory<Produto, String>("validadeFormatada"));
 
+        //Configurando a largura das colunas da tabela
+        tabela.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        colNome.setMaxWidth(1f * Integer.MAX_VALUE * 20); // 20% width
+        colCodigo.setMaxWidth(1f * Integer.MAX_VALUE * 20); // 20% width
+        colPreco.setMaxWidth(1f * Integer.MAX_VALUE * 20); // 20% width
+        colQtde.setMaxWidth(1f * Integer.MAX_VALUE * 20); // 20% width
+        colValidade.setMaxWidth(1f * Integer.MAX_VALUE * 20); // 20% width
+
         //Adiciona as colunas na tabela na ordem que devem aparecer
         tabela.getColumns().addAll(colCodigo, colNome, colPreco,
                 colQtde, colValidade);
@@ -114,8 +121,9 @@ public class ProdutoCadastroController implements Initializable {
             tabela.setItems(dados);
 
         } catch (SQLException ex) {
-            //Mensagem de Erro
-            ex.printStackTrace();
+            mensagemDeErroBD();
+        } catch (ValorInvalidoException ex) {
+            mensagemDeErro(ex.getMessage());
         }
 
     }
@@ -153,22 +161,12 @@ public class ProdutoCadastroController implements Initializable {
                 limparCampos();
 
                 //Mensagem de Sucesso
-                Alert a = new Alert(Alert.AlertType.INFORMATION);
-                a.setTitle("Sucesso");
-                a.setHeaderText(null);
-                a.setContentText("Produto salvo com sucesso!");
-                a.showAndWait();
+                mensagemDeSucesso("Produto salvo com sucesso!");
 
             } else {//no caso de editar
 
-                //Configurando a caixa de confirmacao
-                Alert conf = new Alert(Alert.AlertType.CONFIRMATION);
-                conf.setTitle("Editar");
-                conf.setHeaderText("");
-                conf.setContentText("Deseja mesmo salvar as alterações?");
-
                 //Pegando o botao que foi pressionado
-                Optional<ButtonType> btn = conf.showAndWait();
+                Optional<ButtonType> btn = mensagemDeConfirmacao("Deseja mesmo salvar as alterações?", "EDITAR");
 
                 if (btn.get() == ButtonType.OK) {//quer mesmo salvar
                     //Pegando os dados da tela e criando um produto
@@ -191,11 +189,7 @@ public class ProdutoCadastroController implements Initializable {
                     limparCampos();
 
                     //Mensagem de Sucesso
-                    Alert a = new Alert(Alert.AlertType.INFORMATION);
-                    a.setTitle("Sucesso");
-                    a.setHeaderText(null);
-                    a.setContentText("Produto salvo com sucesso!");
-                    a.showAndWait();
+                    mensagemDeSucesso("Produto salvo com sucesso!");
 
                 } else {
 
@@ -207,31 +201,13 @@ public class ProdutoCadastroController implements Initializable {
             }
 
         } catch (SQLException e) {
-
-            Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setTitle("ERRO");
-            a.setHeaderText(null);
-            a.setContentText("Erro de comunicação com "
-                    + "o Banco de Dado procure o administrador "
-                    + "do sistema");
-            a.showAndWait();
-
+            mensagemDeErroBD();
         } catch (ProdutoExistenteException e) {
-
-            Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setTitle("ERRO");
-            a.setHeaderText(null);
-            a.setContentText(e.getMessage());
-            a.showAndWait();
-
+            mensagemDeErro(e.getMessage());
         } catch (ParseException ex) {
-
-            Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setTitle("ERRO");
-            a.setHeaderText(null);
-            a.setContentText("Problema na conversão do preço ou da quantidade.");
-            a.showAndWait();
-
+            mensagemDeErro("Problema na conversão do preço ou da quantidade.");
+        } catch (ValorInvalidoException e) {
+            mensagemDeErro(e.getMessage());
         }
 
     }
@@ -261,14 +237,8 @@ public class ProdutoCadastroController implements Initializable {
         //Verificar se tem algum produto selecionado na tabela
         if (p != null) { //tem produto selecionado 
 
-            //Configurando a caixa de confirmacao
-            Alert conf = new Alert(Alert.AlertType.CONFIRMATION);
-            conf.setTitle("Excluir");
-            conf.setHeaderText("");
-            conf.setContentText("Deseja excluir?");
-
             //Pegando o botao que foi pressionado
-            Optional<ButtonType> btn = conf.showAndWait();
+            Optional<ButtonType> btn = mensagemDeConfirmacao("Deseja excluir?", "EXCLUIR");
 
             //Verificar qual botão foi pressionado
             if (btn.get() == ButtonType.OK) { //vai excluir
@@ -281,34 +251,17 @@ public class ProdutoCadastroController implements Initializable {
                     //Atualizar a tabela
                     carregarDados();
 
-                    //Mensagem de excluído com sucesso
-                    Alert m = new Alert(Alert.AlertType.INFORMATION);
-                    m.setTitle("Sucesso");
-                    m.setHeaderText(null);
-                    m.setContentText("Produto excluído com sucesso");
-                    m.showAndWait();
+                    //Mensagem de excluído com sucesso                    
+                    mensagemDeSucesso("Produto excluído com sucesso");
 
                 } catch (SQLException ex) {
-                    //Mensagem de erro
-                    Alert a = new Alert(Alert.AlertType.ERROR);
-                    a.setTitle("ERRO");
-                    a.setHeaderText(null);
-                    a.setContentText("Erro de comunicação com "
-                            + "o Banco de Dado procure o administrador "
-                            + "do sistema");
-                    a.showAndWait();
+                    mensagemDeErroBD();
                 }
 
             }
 
         } else {
-
-            Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setTitle("ERRO");
-            a.setHeaderText(null);
-            a.setContentText("Selecione um produto ");
-            a.showAndWait();
-
+            mensagemDeErro("Selecione um produto.");
         }
 
     }
@@ -323,7 +276,7 @@ public class ProdutoCadastroController implements Initializable {
 
         //Jogar a lista no combo
         comboBusca.getItems().addAll(lista);
-        
+
         //Marcando o primeiro ja como selecionado
         comboBusca.getSelectionModel().selectFirst();
 
@@ -346,12 +299,7 @@ public class ProdutoCadastroController implements Initializable {
             validade.setValue(p.getValidade());
 
         } else {//Não tem produto selecionado
-
-            Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setTitle("ERRO");
-            a.setHeaderText(null);
-            a.setContentText("Selecione um produto ");
-            a.showAndWait();
+            mensagemDeErro("Selecione um produto.");
         }
 
     }
@@ -370,58 +318,73 @@ public class ProdutoCadastroController implements Initializable {
             if (campo.equals("Código")) {
 
                 try {
-                    
+
                     //Convertendo o ArrayList no ObservableList com os dados do Banco
                     dados = FXCollections.observableArrayList(pBO.filtrarPeloCodigo(pesquisar));
                     //Joga os dados na tabela para exibir
                     tabela.setItems(dados);
-                    
-                } catch (SQLException ex) {
-                    
-                    
-                    
-                    //Mensagem de erro
-                    Alert a = new Alert(Alert.AlertType.ERROR);
-                    a.setTitle("ERRO");
-                    a.setHeaderText(null);
-                    a.setContentText("Erro de comunicação com "
-                            + "o Banco de Dado procure o administrador "
-                            + "do sistema");
-                    a.showAndWait();
-                    
-                }
 
-                
+                } catch (SQLException ex) {
+                    mensagemDeErroBD();
+                } catch (ValorInvalidoException ex) {
+                    mensagemDeErro(ex.getMessage());
+                }
 
             } else {//No caso de ser nome
 
                 //Buscar pelo Nome
                 try {
-                    
+
                     //Convertendo o ArrayList no ObservableList com os dados do Banco
                     dados = FXCollections.observableArrayList(pBO.filtrarPeloNome(pesquisar));
                     //Joga os dados na tabela para exibir
                     tabela.setItems(dados);
-                    
+
                 } catch (SQLException ex) {
-                    
-                    
-                    //Mensagem de erro
-                    Alert a = new Alert(Alert.AlertType.ERROR);
-                    a.setTitle("ERRO");
-                    a.setHeaderText(null);
-                    a.setContentText("Erro de comunicação com "
-                            + "o Banco de Dado procure o administrador "
-                            + "do sistema");
-                    a.showAndWait();
-                    
+                    mensagemDeErroBD();
+                } catch (ValorInvalidoException ex) {
+                    mensagemDeErro(ex.getMessage());
                 }
             }
 
         } else {
-            //TODO mensagem de erro de campo
+            mensagemDeErro("Favor Selecionar um campo para busca.");
         }
 
+    }
+
+    private void mensagemDeErro(String mensagem) {
+
+        Alert a = new Alert(Alert.AlertType.ERROR);
+        a.setTitle("ERRO");
+        a.setHeaderText(null);
+        a.setContentText(mensagem);
+        a.showAndWait();
+        
+
+
+    }
+
+    private void mensagemDeErroBD() {
+        mensagemDeErro("Erro de comunicação com "
+                + "o Banco de Dado procure o administrador "
+                + "do sistema");
+    }
+    
+    private void mensagemDeSucesso(String mensagem){
+        Alert m = new Alert(Alert.AlertType.INFORMATION);
+        m.setTitle("Sucesso");
+        m.setHeaderText(null);
+        m.setContentText(mensagem);
+        m.showAndWait();
+    }
+    
+    private Optional<ButtonType> mensagemDeConfirmacao(String mensagem, String titulo){
+        Alert conf = new Alert(Alert.AlertType.CONFIRMATION);
+        conf.setTitle(titulo);
+        conf.setHeaderText(null);
+        conf.setContentText(mensagem);
+        return conf.showAndWait();
     }
 
 }

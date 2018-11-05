@@ -1,5 +1,6 @@
 package model.produto;
 
+import excecoes.ValorInvalidoException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,7 +21,7 @@ public class ProdutoDAO {
      * @return 
      * @throws SQLException 
      */
-    public Produto buscarPeloCodigo(String c) throws SQLException{
+    public Produto buscarPeloCodigo(String c) throws SQLException, ValorInvalidoException{
         
         //Comando
         String sql = "SELECT * FROM produto WHERE codigo = ?";
@@ -82,7 +83,8 @@ public class ProdutoDAO {
      * Retorna todos os produtos do banco de dados
      * @return 
      */
-    public ArrayList<Produto> listar() throws SQLException{
+    public ArrayList<Produto> listar() throws SQLException, ValorInvalidoException{
+        
         
         //Comando
         String sql = "SELECT * FROM produto";
@@ -170,7 +172,7 @@ public class ProdutoDAO {
      * @return 
      * @throws SQLException 
      */
-    public ArrayList<Produto> filtrarPeloCodigo(String pesquisar) throws SQLException{
+    public ArrayList<Produto> filtrarPeloCodigo(String pesquisar) throws SQLException, ValorInvalidoException{
         
         //Comando
         String sql = "SELECT * FROM produto WHERE codigo LIKE ?";
@@ -185,7 +187,7 @@ public class ProdutoDAO {
      * @return 
      * @throws SQLException 
      */
-    public ArrayList<Produto> filtrarPeloNome(String pesquisar) throws SQLException{
+    public ArrayList<Produto> filtrarPeloNome(String pesquisar) throws SQLException, ValorInvalidoException{
         
         //Comando
         String sql = "SELECT * FROM produto WHERE nome LIKE ?";
@@ -200,7 +202,7 @@ public class ProdutoDAO {
      * @return 
      * @throws SQLException 
      */
-    public ArrayList<Produto> filtrar(String pesquisar, String sql) throws SQLException {
+    public ArrayList<Produto> filtrar(String pesquisar, String sql) throws SQLException, ValorInvalidoException {
     
         //Preparar o SQL
         PreparedStatement ps = ConnectionFactory.prepararSQL(sql);
